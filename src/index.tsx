@@ -1,29 +1,57 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 
-function useInputFile() {
-  const ref = useRef<HTMLInputElement>(null);
+interface Options {
+  accept?: string;
+  multiple?: boolean;
+}
+
+interface Props {
+  ref: RefObject<HTMLInputElement>;
+  options?: Options | undefined;
+}
+
+function useInputFile({ ref, options }: Props) {
   const [files, setFiles] = useState<FileList | null>(null);
 
-  const getFiles = useCallback((event: Event) => {
-    const files = (event.target as HTMLInputElement).files;
+  useEffect(() => {
+    const input = ref.current as HTMLInputElement;
 
-    setFiles(files);
+    input.type = 'file';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const input = ref.current;
 
+    if (input && options) {
+      if (options.accept) {
+        input.accept = options.accept;
+      }
+      if (options.multiple) {
+        input.multiple = options.multiple;
+      }
+    }
+  }, [ref, options]);
+
+  useEffect(() => {
+    const input = ref.current;
+
     if (input) {
+      const getFiles = (event: Event) => {
+        const files = (event.currentTarget as HTMLInputElement).files;
+
+        setFiles(files);
+      };
+
       input.addEventListener('change', getFiles, false);
 
       return () => {
         input.removeEventListener('change', getFiles, false);
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ref]);
 
-  return { ref, files };
+  return { files };
 }
 
 export default useInputFile;
