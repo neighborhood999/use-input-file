@@ -1,17 +1,30 @@
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
-interface Options {
+export interface Options {
   accept?: string;
   multiple?: boolean;
 }
 
-interface Props {
+export interface Args {
   ref: RefObject<HTMLInputElement>;
   options?: Options | undefined;
 }
 
-function useInputFile({ ref, options }: Props) {
+export interface Callback {
+  (event: Event): void;
+}
+
+export type Files = {
+  files: FileList | null;
+};
+
+function useInputFile({ ref, options }: Args, callback?: Callback): Files {
   const [files, setFiles] = useState<FileList | null>(null);
+  const customerHandler = useRef<(event: Event) => void>();
+
+  useEffect(() => {
+    customerHandler.current = callback;
+  }, [callback]);
 
   useEffect(() => {
     const input = ref.current as HTMLInputElement;
@@ -43,10 +56,18 @@ function useInputFile({ ref, options }: Props) {
         setFiles(files);
       };
 
-      input.addEventListener('change', getFiles, false);
+      const eventListener = (event: Event) => {
+        if (customerHandler.current) {
+          return customerHandler.current(event);
+        }
+
+        return getFiles(event);
+      };
+
+      input.addEventListener('change', eventListener, false);
 
       return () => {
-        input.removeEventListener('change', getFiles, false);
+        input.removeEventListener('change', eventListener, false);
       };
     }
   }, [ref]);
