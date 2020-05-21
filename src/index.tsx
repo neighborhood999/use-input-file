@@ -10,19 +10,19 @@ export interface Args {
   options?: Options | undefined;
 }
 
-export interface Callback {
-  (event: Event): void;
+export interface OnChange<T extends Event = Event> {
+  (event: T): void;
 }
 
 export type Files = {
   files: FileList | null;
 };
 
-function useInputFile({ ref, options }: Args, callback?: Callback): Files {
+function useInputFile({ ref, options }: Args, onChange?: OnChange): Files {
   const [files, setFiles] = useState<FileList | null>(null);
-  const customerHandler = useRef<Callback | undefined>(undefined);
+  const customHandler = useRef<OnChange | undefined>(undefined);
 
-  customerHandler.current = callback;
+  customHandler.current = onChange;
 
   useEffect(() => {
     const input = ref.current as HTMLInputElement;
@@ -55,8 +55,8 @@ function useInputFile({ ref, options }: Args, callback?: Callback): Files {
       };
 
       const eventListener = (event: Event) => {
-        if (customerHandler.current) {
-          return customerHandler.current(event);
+        if (customHandler.current) {
+          return customHandler.current(event);
         }
 
         return getFiles(event);

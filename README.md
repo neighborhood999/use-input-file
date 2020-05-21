@@ -1,1 +1,1 @@
-# useInputFile
+# use-input-file
