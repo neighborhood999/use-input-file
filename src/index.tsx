@@ -20,11 +20,9 @@ export type Files = {
 
 function useInputFile({ ref, options }: Args, callback?: Callback): Files {
   const [files, setFiles] = useState<FileList | null>(null);
-  const customerHandler = useRef<(event: Event) => void>();
+  const customerHandler = useRef<Callback | undefined>(undefined);
 
-  useEffect(() => {
-    customerHandler.current = callback;
-  }, [callback]);
+  customerHandler.current = callback;
 
   useEffect(() => {
     const input = ref.current as HTMLInputElement;
