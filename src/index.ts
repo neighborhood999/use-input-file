@@ -29,9 +29,9 @@ function useInputFile(
   customHandler.current = args.onChange;
 
   useEffect(() => {
-    const input = ref.current as HTMLInputElement;
-
-    input.type = 'file';
+    if (ref.current) {
+      ref.current.type = 'file';
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
