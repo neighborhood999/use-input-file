@@ -5,24 +5,28 @@ export interface Options {
   multiple?: boolean;
 }
 
-export interface Args {
-  ref: RefObject<HTMLInputElement>;
-  options?: Options | undefined;
-}
-
 export interface OnChange<T extends Event = Event> {
   (event: T): void;
 }
 
-export type Files = {
-  files: FileList | null;
+export type Return = {
+  ref: RefObject<HTMLInputElement>;
+  files: File[] | null;
 };
 
-function useInputFile({ ref, options }: Args, onChange?: OnChange): Files {
-  const [files, setFiles] = useState<FileList | null>(null);
+function useInputFile(
+  args: {
+    ref?: RefObject<HTMLInputElement>;
+    options?: Options | undefined;
+    onChange?: OnChange;
+  } = {}
+): Return {
+  const [files, setFiles] = useState<File[] | null>(null);
+  const defaultRef = useRef<HTMLInputElement>(null);
   const customHandler = useRef<OnChange | undefined>(undefined);
 
-  customHandler.current = onChange;
+  const ref = args.ref || defaultRef;
+  customHandler.current = args.onChange;
 
   useEffect(() => {
     const input = ref.current as HTMLInputElement;
@@ -34,7 +38,9 @@ function useInputFile({ ref, options }: Args, onChange?: OnChange): Files {
   useEffect(() => {
     const input = ref.current;
 
-    if (input && options) {
+    if (input && args.options) {
+      const { options } = args;
+
       if (options.accept) {
         input.accept = options.accept;
       }
@@ -42,14 +48,21 @@ function useInputFile({ ref, options }: Args, onChange?: OnChange): Files {
         input.multiple = options.multiple;
       }
     }
-  }, [ref, options]);
+  }, [ref, args]);
 
   useEffect(() => {
     const input = ref.current;
 
     if (input) {
       const getFiles = (event: Event) => {
-        const files = (event.currentTarget as HTMLInputElement).files;
+        // Always create a new files by Array.from().
+        // Because in Firefox, if you use `useEffect` to watch `files` changed it can't work,
+        // but in the Chrome & Safari works well.
+        //
+        // details: https://codesandbox.io/s/input-file-with-useeffect-demo-yrmgk
+        const fileList = (event.currentTarget as HTMLInputElement)
+          .files as FileList;
+        const files: File[] = Array.from(fileList);
 
         setFiles(files);
       };
@@ -70,7 +83,7 @@ function useInputFile({ ref, options }: Args, onChange?: OnChange): Files {
     }
   }, [ref]);
 
-  return { files };
+  return { ref, files };
 }
 
 export default useInputFile;
