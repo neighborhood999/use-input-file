@@ -29,23 +29,16 @@ function useInputFile(
   customHandler.current = args.onChange;
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.type = 'file';
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     const input = ref.current;
 
     if (input && args.options) {
       const { options } = args;
 
       if (options.accept) {
-        input.accept = options.accept;
+        input.setAttribute('accept', options.accept);
       }
       if (options.multiple) {
-        input.multiple = options.multiple;
+        input.setAttribute('multiple', 'multiple');
       }
     }
   }, [ref, args]);
@@ -74,6 +67,8 @@ function useInputFile(
 
         return getFiles(event);
       };
+
+      input.setAttribute('type', 'file');
 
       input.addEventListener('change', eventListener, false);
 
