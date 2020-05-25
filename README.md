@@ -1,8 +1,11 @@
 # use-input-file
 
 ![CI](https://github.com/neighborhood999/use-input-file/workflows/CI/badge.svg)
+[![npm](https://flat.badgen.net/npm/v/use-input-file)](https://www.npmjs.com/package/use-input-file)
+[![minified + gzip](https://flat.badgen.net/bundlephobia/min/use-input-file)](https://bundlephobia.com/result?p=use-input-file)
+[![styled with prettier](https://flat.badgen.net/badge/style%20with/prettier/ff69b4)](https://github.com/prettier/prettier)
 
-A React hook that allows you to handle `<input type="file">`.
+A React hook that allows you to handle HTML `<input type="file">`.
 
 ## Installation
 
@@ -33,14 +36,14 @@ const App () => {
 ## Passing Custom `ref`
 
 ```jsx
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const App () => {
   const ref = useRef(null);
   const { files } = useInputFile({ ref });
 
   // Check your upload files
-  React.useEffect(() => {
+  useEffect(() => {
     console.log(files);
   }, [files]);
 
@@ -57,13 +60,15 @@ You can set input file attributes by `options`:
 ```jsx
 const options = { multiple: true, accept: 'image/*' };
 const { ref, files } = useInput({ options });
+
+// render: <input type="file" multiple="multiple" accept="image/*">
 ```
 
 ## The `onChange` Callback
 
-The hook default will return empty `files`. When input file changed will return new `files`.
+As above, the hook default will return empty `files`, when the input file changed will return new `files` with your changed.
 
-You can pass `onChange` callback argument to `hook` and handle input file change for you want.
+Sometimes you may want to custom onChange for your logic, so you can pass `onChange` callback argument to `hook` and handle input file change for you want.
 
 ```jsx
 const onChange = event => {
@@ -72,6 +77,30 @@ const onChange = event => {
 };
 const { ref } = useInputFile({ onChange });
 ```
+
+## API
+
+```js
+const { ref, file } = useInputFile({/* ...options */});
+```
+
+### Hook Parameters
+
+You can configure `use-input-file` via the below parameters:
+
+| Key      | Type            | Default                                 | Description                                                                                                         |
+| -------- | --------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| ref      | React.RefObject | `React.RefObject<HTMLInputElement>`     | Passing your custom `ref`.                                                                                          |
+| options  | object          | `{ accept: string, multiple: boolean }` | Check [MDN - input type="file"](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file) for more details. |
+| onChange | function        |                                         | You can pass `onChange` callback argument to `hook` and handle input file change for you want.                      |
+
+### Return Values
+
+| Key   | Type            | Default           | Description                                                                                                                                                                                                                    |
+| ----- | --------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ref   | React.RefObject | `React.RefObject` | The react `ref`.                                                                                                                                                                                                               |
+| files | array           | `[]`              | The hook default will return empty [File](https://developer.mozilla.org/en-US/docs/Web/API/File), when the input file changed will return new [File](https://developer.mozilla.org/en-US/docs/Web/API/File) with your changed. |
+
 
 ## Tests
 
