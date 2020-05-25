@@ -33,6 +33,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Installing Deps
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           yarn install
 
