@@ -1,6 +1,7 @@
 node_modules/
 tmp/
 dist/
+coverage/
 *.d.ts
 package.json
 tsconfig.json

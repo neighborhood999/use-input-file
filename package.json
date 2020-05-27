@@ -11,8 +11,9 @@
   ],
   "scripts": {
     "dev": "microbundle watch",
-    "build": "microbundle",
+    "build": "trash dist/ && microbundle --no-sourcemap",
     "test": "jest",
+    "test:cov": "jest --coverage",
     "lint": "eslint src --ext .ts,.tsx",
     "prepublishOnly": "make lint && make test && make build"
   },
@@ -63,6 +64,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-test-renderer": "^16.13.1",
+    "trash-cli": "^3.0.0",
     "ts-jest": "^26.0.0",
     "typescript": "^3.9.2"
   },

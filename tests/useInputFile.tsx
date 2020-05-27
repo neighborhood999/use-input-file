@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { act, renderHook } from '@testing-library/react-hooks';
 import { fireEvent, render } from '@testing-library/react';
-import useInputFile, { Options } from '..';
+import useInputFile, { Options } from '../src';
 
 const setup = () => {
   const ref = { current: document.createElement('input') };
