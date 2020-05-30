@@ -7,6 +7,10 @@
 
 A React hook that allows you to handle HTML `<input type="file">`.
 
+## DEMO
+
+[![Edit](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/use-input-file-demo-5wke5)
+
 ## Installation
 
 ```sh

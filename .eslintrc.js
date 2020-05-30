@@ -16,13 +16,20 @@ module.exports = {
     'prettier/@typescript-eslint'
   ],
 
-  plugins: ['react-hooks'],
+  plugins: ['react-hooks', 'import'],
 
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
-    'no-console': 'warn'
+    'no-console': 'warn',
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'parent', 'sibling', 'index'],
+        'newlines-between': 'always'
+      }
+    ]
   },
 
   settings: {
