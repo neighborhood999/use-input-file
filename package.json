@@ -1,7 +1,7 @@
 {
   "name": "use-input-file",
   "description": "React hook for creating input file",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "source": "src/index.ts",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
