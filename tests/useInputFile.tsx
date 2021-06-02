@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { act, renderHook } from '@testing-library/react-hooks';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import useInputFile, { Options } from '../src';
 
@@ -19,11 +19,12 @@ describe('useInputFile', () => {
       const Component: FC = () => {
         const { ref } = useInputFile();
 
-        return <input ref={ref} />;
+        return <input ref={ref} data-testid="my-input" />;
       };
-      const { container } = render(<Component />);
 
-      expect(container.firstChild).toHaveAttribute('type', 'file');
+      render(<Component />);
+
+      expect(screen.getByTestId('my-input')).toHaveAttribute('type', 'file');
     });
 
     it('should set input type as file with custom ref', () => {
