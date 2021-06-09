@@ -1,4 +1,3 @@
-import React, { FC } from 'react';
 import { act, renderHook } from '@testing-library/react-hooks';
 import { fireEvent, render, screen } from '@testing-library/react';
 
@@ -16,11 +15,11 @@ const setup = () => {
 describe('useInputFile', () => {
   describe('ref', () => {
     it('should set input type as file ', () => {
-      const Component: FC = () => {
+      function Component() {
         const { ref } = useInputFile();
 
         return <input ref={ref} data-testid="my-input" />;
-      };
+      }
 
       render(<Component />);
 
