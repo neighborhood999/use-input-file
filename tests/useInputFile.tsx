@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react-hooks';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import useInputFile, { Options } from '../src';
@@ -63,9 +63,7 @@ describe('useInputFile', () => {
       const onChange = jest.fn();
       renderHook(() => useInputFile({ ref, onChange }));
 
-      act(() => {
-        fireEvent.change(ref.current, { target: { files: [file] } });
-      });
+      fireEvent.change(ref.current, { target: { files: [file] } });
 
       expect(onChange).toBeCalled();
     });
@@ -74,9 +72,7 @@ describe('useInputFile', () => {
       const { ref, file } = setup();
       const { result } = renderHook(() => useInputFile({ ref }));
 
-      act(() => {
-        fireEvent.change(ref.current, { target: { files: [file] } });
-      });
+      fireEvent.change(ref.current, { target: { files: [file] } });
 
       expect(result.current.files).toEqual([file]);
     });
